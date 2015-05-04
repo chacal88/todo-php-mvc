@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+<form class="form-inline" action="../../todo/add" method="post">
+  <div class="form-group">
+    <label for="todo">TODO</label>
+    <input type="text" class="form-control" name="todo" id="todo" placeholder="insira o todo..">
+  </div>
+  <button type="submit" class="btn btn-default">Cadastrar</button>
+</form>
+  <div class="list-group">
+      <?php foreach ($todo as $todoitem):?>
+      <a class="list-group-item" href="../../todo/view/id/<?php echo $todoitem['Todo']['id']?>" class="list-group-item active">
+       <?php echo $todoitem['Todo']['description']?>
+      </a>
+     <?php endforeach?> 
+    </div>
+</div>

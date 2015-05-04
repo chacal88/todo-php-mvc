@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-10"><?php echo $todo['Todo']['description']?></div>
+			<div class="col-md-2">
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" name="delete" id="delete"
+						class="btn btn-default">Deletar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#delete').click(function() {      
+		var id = "<?php echo $todo['Todo']['id'];?>";       
+		$.ajax({
+			type: 'POST',                 
+			dataType: 'json',                 
+			url: '../../../todo/delete/',                                 
+			 data: {'id':id}            
+			}); 
+		   location.href="../../../todo/index" 
+		         
+		 }); 
+});
+</script>
