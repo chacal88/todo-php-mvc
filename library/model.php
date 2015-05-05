@@ -3,20 +3,23 @@
  * @author kauesantos
  * Classe model principal
  */
-class Model extends MysqlFactory {
+class Model {
 	
     /**
      * Model
      * @var unknown
      */
     protected $_model;
+    
+    protected $_connection;
 
 	/**
 	 * Metodo contrutor
 	 */
 	function __construct() {
 
-		$this->connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+	    $this->_connection =  new MysqlFactory();
+		$this->_connection->connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 		$this->_model = get_class($this);
 		$this->_table = strtolower($this->_model);
 	}
@@ -51,30 +54,30 @@ class Model extends MysqlFactory {
 	 */
 	function query($query, $singleResult = 0) {
 	
-	    $this->_result = mysql_query($query, $this->_dbHandle);
+	    $this->_connection->_result = mysql_query($query, $this->_connection->_dbHandle);
 	
 	    if (preg_match("/select/i",$query)) {
 	        $result = array();
 	        $table = array();
 	        $field = array();
 	        $tempResults = array();
-	        $numOfFields = mysql_num_fields($this->_result);
+	        $numOfFields = mysql_num_fields($this->_connection->_result);
 	        for ($i = 0; $i < $numOfFields; ++$i) {
-	            array_push($table,mysql_field_table($this->_result, $i));
-	            array_push($field,mysql_field_name($this->_result, $i));
+	            array_push($table,mysql_field_table($this->_connection->_result, $i));
+	            array_push($field,mysql_field_name($this->_connection->_result, $i));
 	        }
-	        while ($row = mysql_fetch_row($this->_result)) {
+	        while ($row = mysql_fetch_row($this->_connection->_result)) {
 	            for ($i = 0;$i < $numOfFields; ++$i) {
 	                $table[$i] = trim(ucfirst($table[$i]),"s");
 	                $tempResults[$table[$i]][$field[$i]] = $row[$i];
 	            }
 	            if ($singleResult == 1) {
-	                mysql_free_result($this->_result);
+	                mysql_free_result($this->_connection->_result);
 	                return $tempResults;
 	            }
 	            array_push($result,$tempResults);
 	        }
-	        mysql_free_result($this->_result);
+	        mysql_free_result($this->_connection->_result);
 	        return($result);
 	    }
 	}
@@ -84,7 +87,7 @@ class Model extends MysqlFactory {
 	 * @return int
 	 */
 	function getNumRows() {
-	    return mysql_num_rows($this->_result);
+	    return mysql_num_rows($this->_connection->_result);
 	}
 	
 	function __destruct() {

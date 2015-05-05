@@ -5,6 +5,7 @@
  * Classe responsavel pela comunicacao com o banco de dados
  */
 class MysqlFactory {
+    
     protected $_dbHandle;
     protected $_result;
 

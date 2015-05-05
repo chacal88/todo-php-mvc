@@ -33,7 +33,8 @@ class TodoController extends ControllerAction {
 		$todo = $_POST['todo'];
 		$this->view('title','Inserindo - Lista de TODO');
 		$todoModel = new Todo();
-		$this->view('todo',$todoModel->insert( $todo ));	
+		$todoModel->setDescription($todo['description']);
+		$this->view('todo',$todoModel->insert());	
 		$this->_redirect("../../../todo/index");
 	}
 	
@@ -43,7 +44,8 @@ class TodoController extends ControllerAction {
 	function deleteAction() {
 		$this->view('title','deletando - Lista de TODO');
 		$todoModel = new Todo();
-		$this->view('todo',$todoModel->delete( $_POST['id'] ));
+		$todoModel->setId($_POST['id']);
+		$this->view('todo',$todoModel->delete());
 		$this->_redirect("../../../../todo/index");
 	}
 
